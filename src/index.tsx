@@ -61,8 +61,7 @@ export default class GeolocationMap {
           defaultCenter={heatmapCenter}
           heatmap={heatmapData}
           bootstrapURLKeys={{
-            // TODO: comment in line below when an api key is set
-            // key: import.meta.env.VITE_GMAPS_API_KEY,
+            key: import.meta.env.VITE_GMAPS_API_KEY,
             libraries: ["places", "visualization"],
           }}
         />

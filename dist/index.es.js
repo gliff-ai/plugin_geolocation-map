@@ -7815,6 +7815,7 @@ class GeolocationMap {
         defaultCenter: heatmapCenter,
         heatmap: heatmapData,
         bootstrapURLKeys: {
+          key: "AIzaSyA4zViSigqaandxHw1fgqDbaHhOo-tNTcU",
           libraries: ["places", "visualization"]
         }
       })) : null;
