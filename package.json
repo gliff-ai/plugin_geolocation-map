@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "scripts": {
-    "build": "npx vite build -c vite.config.lib.ts && tsc --emitDeclarationOnly --outDir dist",
+    "build": "npx vite build -c vite.config.lib.ts && tsc --emitDeclarationOnly --outDir dist && rm -rf ./dist/*.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "tsc --noEmit && npm run lint:ts && npm run prettier",
     "prettier": "npx --no-install prettier -c src",
@@ -33,10 +33,6 @@
     "jest": "^27.0.3",
     "prettier": "=2.3.0",
     "@types/react": "^17.0.3",
-    "vite": "^2.5.8",
-    "vite-aliases": "^0.8.6"
-  },
-  "peerDependencies": {
-    "react": "^17.0.0"
+    "vite": "^2.5.8"
   }
 }
