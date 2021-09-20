@@ -55,17 +55,15 @@ export default class GeolocationMap {
     };
 
     return positionData.length > 0 ? (
-      <>
-        <GoogleMapReact
-          defaultZoom={defaultZoom}
-          defaultCenter={heatmapCenter}
-          heatmap={heatmapData}
-          bootstrapURLKeys={{
-            key: import.meta.env.VITE_GMAPS_API_KEY,
-            libraries: ["places", "visualization"],
-          }}
-        />
-      </>
+      <GoogleMapReact
+        defaultZoom={defaultZoom}
+        defaultCenter={heatmapCenter}
+        heatmap={heatmapData}
+        bootstrapURLKeys={{
+          key: import.meta.env.VITE_GMAPS_API_KEY,
+          libraries: ["places", "visualization"],
+        }}
+      />
     ) : null;
   };
 }
