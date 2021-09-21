@@ -1,4 +1,4 @@
-import GoogleMapReact from "google-map-react";
+import GoogleMapReact, { ReactElement } from "google-map-react";
 import { PositionMeta, PositionData, HeatmapData } from "./interfaces";
 
 export default class GeolocationMap {
@@ -37,8 +37,13 @@ export default class GeolocationMap {
     ];
   };
 
-  onClick = (metadata: PositionMeta): JSX.Element | null => {
-    if (!metadata) return null;
+  isEmpty = (metadata: PositionMeta): boolean => {
+    const res = metadata.filter((mitem) => "gps" in mitem);
+    return res.length === 0;
+  };
+
+  onClick = (metadata: PositionMeta): ReactElement | null => {
+    if (!metadata || this.isEmpty(metadata)) return null;
 
     const defaultZoom = 1;
 

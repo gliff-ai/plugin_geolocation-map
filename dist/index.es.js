@@ -8091,8 +8091,12 @@ class GeolocationMap {
         getSum(positionData, "lng") / positionData.length
       ];
     };
+    this.isEmpty = (metadata) => {
+      const res = metadata.filter((mitem) => "gps" in mitem);
+      return res.length === 0;
+    };
     this.onClick = (metadata) => {
-      if (!metadata)
+      if (!metadata || this.isEmpty(metadata))
         return null;
       const defaultZoom = 1;
       const positionData = this.getData(metadata);
