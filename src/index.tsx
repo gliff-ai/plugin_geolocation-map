@@ -1,4 +1,4 @@
-import GoogleMapReact from "google-map-react";
+import GoogleMapReact, { ReactElement } from "google-map-react";
 import { PositionMeta, PositionData, HeatmapData } from "./interfaces";
 
 export default class GeolocationMap {
@@ -37,8 +37,13 @@ export default class GeolocationMap {
     ];
   };
 
-  onClick = (metadata: PositionMeta): JSX.Element | null => {
-    if (!metadata) return null;
+  isEmpty = (metadata: PositionMeta): boolean => {
+    const res = metadata.filter((mitem) => "gps" in mitem);
+    return res.length === 0;
+  };
+
+  onClick = (metadata: PositionMeta): ReactElement | null => {
+    if (!metadata || this.isEmpty(metadata)) return null;
 
     const defaultZoom = 1;
 
@@ -55,17 +60,15 @@ export default class GeolocationMap {
     };
 
     return positionData.length > 0 ? (
-      <>
-        <GoogleMapReact
-          defaultZoom={defaultZoom}
-          defaultCenter={heatmapCenter}
-          heatmap={heatmapData}
-          bootstrapURLKeys={{
-            key: import.meta.env.VITE_GMAPS_API_KEY,
-            libraries: ["places", "visualization"],
-          }}
-        />
-      </>
+      <GoogleMapReact
+        defaultZoom={defaultZoom}
+        defaultCenter={heatmapCenter}
+        heatmap={heatmapData}
+        bootstrapURLKeys={{
+          key: import.meta.env.VITE_GMAPS_API_KEY,
+          libraries: ["places", "visualization"],
+        }}
+      />
     ) : null;
   };
 }
