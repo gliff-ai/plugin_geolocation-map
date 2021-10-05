@@ -1,6 +1,6 @@
 export type PositionData = { lat: number; lng: number; weight: number }[];
 
-export type PositionMeta = { gps: { latitude: number; longitude: number } }[];
+export type PositionMeta = { latitude: number; longitude: number }[];
 
 export interface HeatmapData {
   positions: {

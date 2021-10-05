@@ -19,10 +19,10 @@ export default class GeolocationMap {
 
   getData = (metadata: PositionMeta): PositionData =>
     metadata
-      .filter((mitem) => mitem?.gps?.latitude && mitem?.gps?.longitude)
-      .map(({ gps }) => ({
-        lat: gps.latitude,
-        lng: gps.longitude,
+      .filter((mitem) => mitem?.latitude && mitem?.longitude)
+      .map(({ latitude, longitude }) => ({
+        lat: latitude,
+        lng: longitude,
         weight: 1,
       }));
 
@@ -38,7 +38,9 @@ export default class GeolocationMap {
   };
 
   isEmpty = (metadata: PositionMeta): boolean => {
-    const res = metadata.filter((mitem) => "gps" in mitem);
+    const res = metadata.filter(
+      (mitem) => "latitude" in mitem && "longitude" in mitem
+    );
     return res.length === 0;
   };
 
