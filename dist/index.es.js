@@ -8074,12 +8074,9 @@ he.propTypes = { apiKey: o.string, bootstrapURLKeys: o.any, defaultCenter: o.one
 }, googleMapLoader: z, yesIWantToUseGoogleMapApiInternals: false, style: { width: "100%", height: "100%", margin: 0, padding: 0, position: "relative" }, layerTypes: [], heatmap: {}, heatmapLibrary: false, shouldUnregisterMapOnUnmount: true }, he.googleMapLoader = z;
 class GeolocationMap {
   constructor() {
-    this.getData = (metadata) => metadata.filter((mitem) => {
-      var _a, _b;
-      return ((_a = mitem == null ? void 0 : mitem.gps) == null ? void 0 : _a.latitude) && ((_b = mitem == null ? void 0 : mitem.gps) == null ? void 0 : _b.longitude);
-    }).map(({ gps }) => ({
-      lat: gps.latitude,
-      lng: gps.longitude,
+    this.getData = (metadata) => metadata.filter((mitem) => (mitem == null ? void 0 : mitem.latitude) && (mitem == null ? void 0 : mitem.longitude)).map(({ latitude, longitude }) => ({
+      lat: latitude,
+      lng: longitude,
       weight: 1
     }));
     this.getCenter = (positionData) => {
@@ -8092,7 +8089,7 @@ class GeolocationMap {
       ];
     };
     this.isEmpty = (metadata) => {
-      const res = metadata.filter((mitem) => "gps" in mitem);
+      const res = metadata.filter((mitem) => "latitude" in mitem && "longitude" in mitem);
       return res.length === 0;
     };
     this.onClick = (metadata) => {
