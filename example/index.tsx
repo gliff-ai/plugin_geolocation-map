@@ -20,9 +20,12 @@ const App = (): ReactElement => {
         fill={undefined}
         tooltipPlacement="top-start"
         onClick={() => {
-          const element = plugin.onClick(sampleMetadata);
-          if (element !== null) {
-            setMap(element);
+          const response = plugin.onClick({ metadata: sampleMetadata });
+          if (response?.domElement) {
+            setMap(response?.domElement);
+          }
+          if (response?.message) {
+            alert(response.message);
           }
         }}
       />

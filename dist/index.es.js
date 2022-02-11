@@ -8089,36 +8089,43 @@ class GeolocationMap {
       ];
     };
     this.isEmpty = (metadata) => {
-      const res = metadata.filter((mitem) => "latitude" in mitem && "longitude" in mitem);
-      return res.length === 0;
+      const result = metadata.filter((mitem) => "latitude" in mitem && "longitude" in mitem);
+      return result.length === 0;
     };
-    this.onClick = (metadata) => {
-      if (!metadata || this.isEmpty(metadata))
-        return null;
-      const defaultZoom = 1;
-      const positionData = this.getData(metadata);
-      const heatmapCenter = this.getCenter(positionData);
-      const heatmapData = {
-        positions: positionData,
-        options: {
-          radius: 20,
-          opacity: 1
+    this.onClick = (data) => {
+      if (!!(data == null ? void 0 : data.metadata) && !this.isEmpty(data == null ? void 0 : data.metadata)) {
+        const defaultZoom = 1;
+        const positionData = this.getData(data == null ? void 0 : data.metadata);
+        const heatmapCenter = this.getCenter(positionData);
+        const heatmapData = {
+          positions: positionData,
+          options: {
+            radius: 20,
+            opacity: 1
+          }
+        };
+        if (positionData.length > 0) {
+          return {
+            domElement: /* @__PURE__ */ React.createElement(he, {
+              defaultZoom,
+              defaultCenter: heatmapCenter,
+              heatmap: heatmapData,
+              bootstrapURLKeys: {
+                key: "AIzaSyA4zViSigqaandxHw1fgqDbaHhOo-tNTcU",
+                libraries: ["places", "visualization"]
+              }
+            })
+          };
         }
+      }
+      return {
+        domElement: null,
+        message: "The metadata does not contain geolocation data."
       };
-      return positionData.length > 0 ? /* @__PURE__ */ React.createElement(he, {
-        defaultZoom,
-        defaultCenter: heatmapCenter,
-        heatmap: heatmapData,
-        bootstrapURLKeys: {
-          key: "AIzaSyA4zViSigqaandxHw1fgqDbaHhOo-tNTcU",
-          libraries: ["places", "visualization"]
-        }
-      }) : null;
     };
     this.name = "Geolocation Map";
     this.icon = "places";
     this.tooltip = "Plot geolocation heatmap";
-    this.usesModal = true;
   }
 }
 export { GeolocationMap as default };
