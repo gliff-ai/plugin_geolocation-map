@@ -1,5 +1,11 @@
-import GoogleMapReact, { ReactElement } from "google-map-react";
-import { PositionMeta, PositionData, HeatmapData } from "./interfaces";
+import GoogleMapReact from "google-map-react";
+import {
+  PositionMeta,
+  PositionData,
+  HeatmapData,
+  PluginDataIn,
+  PluginDataOut,
+} from "./interfaces";
 
 export default class GeolocationMap {
   name: string;
@@ -8,16 +14,13 @@ export default class GeolocationMap {
 
   tooltip: string;
 
-  usesModal: boolean;
-
   constructor() {
     this.name = "Geolocation Map";
     this.icon = "places";
     this.tooltip = "Plot geolocation heatmap";
-    this.usesModal = true;
   }
 
-  getData = (metadata: PositionMeta): PositionData =>
+  private getData = (metadata: PositionMeta): PositionData =>
     metadata
       .filter((mitem) => mitem?.latitude && mitem?.longitude)
       .map(({ latitude, longitude }) => ({
@@ -26,7 +29,7 @@ export default class GeolocationMap {
         weight: 1,
       }));
 
-  getCenter = (positionData: PositionData): number[] => {
+  private getCenter = (positionData: PositionData): number[] => {
     function getSum(data: PositionData, key: string): number {
       return data.map((d) => d[key] as number).reduce((a, b) => a + b);
     }
@@ -37,40 +40,49 @@ export default class GeolocationMap {
     ];
   };
 
-  isEmpty = (metadata: PositionMeta): boolean => {
-    const res = metadata.filter(
+  private isEmpty = (metadata: PositionMeta): boolean => {
+    const result = metadata.filter(
       (mitem) => "latitude" in mitem && "longitude" in mitem
     );
-    return res.length === 0;
+    return result.length === 0;
   };
 
-  onClick = (metadata: PositionMeta): ReactElement | null => {
-    if (!metadata || this.isEmpty(metadata)) return null;
+  onClick = (data: PluginDataIn): PluginDataOut => {
+    if (!!data?.metadata && !this.isEmpty(data?.metadata)) {
+      const defaultZoom = 1;
 
-    const defaultZoom = 1;
+      const positionData: PositionData = this.getData(data?.metadata);
 
-    const positionData: PositionData = this.getData(metadata);
+      const heatmapCenter = this.getCenter(positionData);
 
-    const heatmapCenter = this.getCenter(positionData);
+      const heatmapData: HeatmapData = {
+        positions: positionData,
+        options: {
+          radius: 20,
+          opacity: 1,
+        },
+      };
 
-    const heatmapData: HeatmapData = {
-      positions: positionData,
-      options: {
-        radius: 20,
-        opacity: 1,
-      },
+      if (positionData.length > 0) {
+        return {
+          domElement: (
+            <GoogleMapReact
+              defaultZoom={defaultZoom}
+              defaultCenter={heatmapCenter}
+              heatmap={heatmapData}
+              bootstrapURLKeys={{
+                key: import.meta.env.VITE_GMAPS_API_KEY,
+                libraries: ["places", "visualization"],
+              }}
+            />
+          ),
+        };
+      }
+    }
+
+    return {
+      domElement: null,
+      message: "The metadata does not contain geolocation data.",
     };
-
-    return positionData.length > 0 ? (
-      <GoogleMapReact
-        defaultZoom={defaultZoom}
-        defaultCenter={heatmapCenter}
-        heatmap={heatmapData}
-        bootstrapURLKeys={{
-          key: import.meta.env.VITE_GMAPS_API_KEY,
-          libraries: ["places", "visualization"],
-        }}
-      />
-    ) : null;
   };
 }

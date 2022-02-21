@@ -1,8 +1,7 @@
-export type PositionData = { lat: number; lng: number; weight: number }[];
+type PositionData = { lat: number; lng: number; weight: number }[];
 
-export type PositionMeta = { latitude: number; longitude: number }[];
-
-export interface HeatmapData {
+type PositionMeta = { latitude: number; longitude: number }[];
+interface HeatmapData {
   positions: {
     lat: number;
     lng: number;
@@ -13,3 +12,20 @@ export interface HeatmapData {
     opacity?: number;
   };
 }
+
+interface PluginDataIn {
+  metadata: PositionMeta;
+}
+
+interface PluginDataOut {
+  domElement: JSX.Element | null;
+  message?: string | null;
+}
+
+export type {
+  PositionData,
+  PositionMeta,
+  HeatmapData,
+  PluginDataIn,
+  PluginDataOut,
+};
